@@ -47,6 +47,32 @@
       radial-gradient(50% 40% at 5% 60%, rgba(11,79,204,0.12), transparent 70%);
   }
   .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  /* film grain overlay — cinematic texture */
+  .grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.38;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:160px 160px}
+
+  /* viewfinder corner brackets around the hero */
+  .corners i{position:absolute;width:26px;height:26px;border:2px solid rgba(30,127,255,.45);
+    filter:drop-shadow(0 0 6px rgba(30,127,255,.35))}
+  .corners i:nth-child(1){top:2px;left:0;border-right:0;border-bottom:0}
+  .corners i:nth-child(2){top:2px;right:0;border-left:0;border-bottom:0}
+  .corners i:nth-child(3){bottom:2px;left:0;border-right:0;border-top:0}
+  .corners i:nth-child(4){bottom:2px;right:0;border-left:0;border-top:0}
+
+  /* showreel ticker */
+  .reel{position:relative;overflow:hidden;margin:6px 0;padding:12px 0;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg,rgba(30,127,255,.06),rgba(0,0,0,0) 20%,rgba(0,0,0,0) 80%,rgba(30,127,255,.06));
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .reel-track{display:inline-flex;white-space:nowrap;width:max-content;animation:reel 34s linear infinite}
+  .reel-track .grp{display:inline-flex;align-items:center;font-family:"Chakra Petch";font-weight:700;
+    font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .reel-track .grp span{padding:0 20px}
+  .reel-track .grp b{color:var(--blue-lt);font-size:11px}
+  @keyframes reel{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   h1,h2,h3,.num,.eyebrow{font-family:"Chakra Petch",sans-serif}
 
   /* ---------- sticky bar ---------- */
@@ -71,7 +97,7 @@
   .wa-mini svg{width:16px;height:16px;fill:#04310f}
 
   /* ---------- hero ---------- */
-  .hero{text-align:center;padding:54px 0 30px}
+  .hero{text-align:center;padding:54px 0 30px;position:relative}
   .emblem{
     width:150px;height:150px;margin:0 auto 20px;position:relative;
     animation:float 6s ease-in-out infinite;
@@ -147,6 +173,10 @@
 
   .extras .card{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .extras .card .price{margin-top:0}
+  .subhead{display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+    font-family:"Chakra Petch";font-weight:700;font-size:15px;color:var(--blue-lt);letter-spacing:.04em}
+  .subhead:first-of-type{margin-top:4px}
+  .subhead::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
 
   /* vision / creative-freedom section */
   .vision-lead{color:#cdd6e2;font-size:clamp(15px,3.6vw,17px);max-width:640px;margin-bottom:22px}
@@ -204,6 +234,10 @@
   }
   .final h2{font-size:clamp(22px,5.6vw,34px);font-weight:700}
   .final p{color:var(--muted);margin-top:8px;font-size:15px}
+  .ig-callout{margin-top:20px;font-family:"Chakra Petch";font-weight:600;
+    font-size:clamp(14px,3.8vw,17px);color:#fff}
+  .ig-callout span{background:linear-gradient(90deg,#f58529,#dd2a7b,#8134af);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
   .contact-lines{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:22px;color:#cdd6e2;font-size:14.5px}
   .contact-lines a{color:#cdd6e2;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
   .contact-lines a:hover{color:#fff}
@@ -223,12 +257,13 @@
     section{padding:34px 0}
   }
   @media (prefers-reduced-motion:reduce){
-    .emblem,.impact::after{animation:none}
+    .emblem,.impact::after,.dream::after,.reel-track{animation:none}
     .reveal{opacity:1;transform:none;transition:none}
   }
 </style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
 
 <!-- sticky bar -->
 <div class="topbar">
@@ -245,11 +280,12 @@
 
   <!-- hero -->
   <header class="hero">
+    <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="emblem" role="img" aria-label="JOSUESANTOSTECH"></div>
     <div class="wordmark">JOSUESANTOS<span class="t">TECH</span></div>
     <div class="tagline">Criar • Inovar • Transformar</div>
     <p class="sub">Produção de <b>vídeo publicitário com a IA mais top do mercado</b>. Comerciais, clipes musicais, trilha exclusiva e mascote 3D — qualidade de cinema, preço que cabe no seu negócio.</p>
-    <div class="impact">Você encontra mais barato. Mas com esse preço e essa qualidade, vai ser difícil.</div>
+    <div class="impact">Cinema e animação para a sua marca — excelência premium com preço que cabe no seu bolso.</div>
     <div class="cta-row">
       <a class="btn btn-wa" href="https://wa.me/5561982116291?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20v%C3%ADdeo%20com%20IA." target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.5-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 2 .8 2.7.9 3.7.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.3A10 10 0 1 0 12 2"/></svg>
@@ -262,7 +298,12 @@
     </div>
   </header>
 
-  <div class="divider"></div>
+  <div class="reel" aria-hidden="true">
+    <div class="reel-track">
+      <div class="grp"><span>COMERCIAIS</span><b>&#10022;</b><span>CLIPES MUSICAIS</span><b>&#10022;</b><span>ANIMA&Ccedil;&Atilde;O 3D</span><b>&#10022;</b><span>MOTION GRAPHICS</span><b>&#10022;</b><span>AVATAR IA</span><b>&#10022;</b><span>AN&Uacute;NCIO UGC</span><b>&#10022;</b><span>TRAILER</span><b>&#10022;</b><span>VINHETA</span><b>&#10022;</b><span>DUBLAGEM IA</span><b>&#10022;</b><span>MASCOTE 3D</span><b>&#10022;</b></div>
+      <div class="grp"><span>COMERCIAIS</span><b>&#10022;</b><span>CLIPES MUSICAIS</span><b>&#10022;</b><span>ANIMA&Ccedil;&Atilde;O 3D</span><b>&#10022;</b><span>MOTION GRAPHICS</span><b>&#10022;</b><span>AVATAR IA</span><b>&#10022;</b><span>AN&Uacute;NCIO UGC</span><b>&#10022;</b><span>TRAILER</span><b>&#10022;</b><span>VINHETA</span><b>&#10022;</b><span>DUBLAGEM IA</span><b>&#10022;</b><span>MASCOTE 3D</span><b>&#10022;</b></div>
+    </div>
+  </div>
 
   <!-- vision / o que dá pra criar -->
   <section id="criar">
@@ -328,6 +369,35 @@
     </div>
   </section>
 
+  <!-- mais servicos com IA -->
+  <section id="mais-ia">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Cat&aacute;logo completo</span>
+      <h2>Mais servi&ccedil;os com IA</h2>
+      <p>Muito al&eacute;m do comercial. Formatos que o seu concorrente ainda nem sabe que existem.</p>
+    </div>
+
+    <div class="subhead reveal">🎨 Anima&ccedil;&atilde;o</div>
+    <div class="grid">
+      <div class="card reveal"><div class="label">Vinheta / logo animado</div><div class="meta">Abertura ou encerramento da marca</div><div class="price"><span class="cur">R$</span>147</div></div>
+      <div class="card reveal"><div class="label">V&iacute;deo explicativo animado</div><div class="meta">Estilo "como funciona", 30–60s</div><div class="price"><small>a partir de </small><span class="cur">R$</span>497</div></div>
+      <div class="card reveal"><div class="label">Anima&ccedil;&atilde;o infantil / cartoon</div><div class="meta">Estilo 3D dos grandes est&uacute;dios de cinema</div><div class="price"><small>a partir de </small><span class="cur">R$</span>697</div></div>
+      <div class="card reveal"><div class="label">Motion graphics</div><div class="meta">Oferta, n&uacute;meros e texto em movimento</div><div class="price"><span class="cur">R$</span>197</div></div>
+      <div class="card reveal"><div class="label">Foto que ganha vida</div><div class="meta">Retrato ou foto antiga animada</div><div class="price"><span class="cur">R$</span>97</div></div>
+      <div class="card reveal"><div class="label">Produto 3D girando</div><div class="meta">Showcase 360°, cara de e-commerce</div><div class="price"><span class="cur">R$</span>297</div></div>
+    </div>
+
+    <div class="subhead reveal">🎬 V&iacute;deo IA</div>
+    <div class="grid">
+      <div class="card reveal"><div class="label">Apresentador / avatar IA</div><div class="meta">Porta-voz digital da marca</div><div class="price"><span class="cur">R$</span>297</div></div>
+      <div class="card reveal"><div class="label">An&uacute;ncio estilo UGC</div><div class="meta">Personagem IA usando o produto</div><div class="price"><span class="cur">R$</span>247</div></div>
+      <div class="card reveal"><div class="label">Dublagem / troca de idioma</div><div class="meta">Voz IA em outro idioma</div><div class="price"><span class="cur">R$</span>197</div></div>
+      <div class="card reveal"><div class="label">Cortes para redes</div><div class="meta">1 v&iacute;deo longo vira v&aacute;rios Reels</div><div class="price"><span class="cur">R$</span>147</div></div>
+      <div class="card reveal"><div class="label">V&iacute;deo de fotos cinematogr&aacute;fico</div><div class="meta">Tour premium — im&oacute;veis, eventos</div><div class="price"><span class="cur">R$</span>197</div></div>
+      <div class="card reveal"><div class="label">Trailer / teaser</div><div class="meta">An&uacute;ncio curto de lan&ccedil;amento</div><div class="price"><span class="cur">R$</span>267</div></div>
+    </div>
+  </section>
+
   <!-- extras -->
   <section id="extras" class="extras">
     <div class="sec-head reveal">
@@ -384,6 +454,7 @@
     <div class="final reveal">
       <h2>Bora tirar sua ideia do papel?</h2>
       <p>Me chama com o que você tem em mente — eu monto o orçamento na hora.</p>
+      <div class="ig-callout reveal">📲 Acesse meu <span>Instagram</span> e confira meus trabalhos</div>
       <div class="cta-row">
         <a class="btn btn-wa" href="https://wa.me/5561982116291?text=Ol%C3%A1!%20Quero%20um%20or%C3%A7amento%20de%20v%C3%ADdeo%20com%20IA." target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.5-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 2 .8 2.7.9 3.7.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.3A10 10 0 1 0 12 2"/></svg>
